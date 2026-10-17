@@ -39,7 +39,10 @@
     "file-actions",
     "explorer"
   ],
-  "author": "nubeslove",
+  "author": {
+    "name": "nubeslove",
+    "email": "1992335297@qq.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
