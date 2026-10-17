@@ -35,6 +35,13 @@ DSH renders file mentions as blue chips (`index.html`, `@src/app.tsx`). They loo
 - `file:///` 形式的链接
 - 内容像本地路径的行内代码（`code` 元素）
 
+被引用的是网页地址（`http://` / `https://`）时，菜单换成网址专用：**用浏览器打开**、**复制链接**。网页地址不会被当成本地路径去定位。
+
+## 更新记录
+
+- **0.1.1** — 修复网页地址被误当作相对路径解析、报 `path does not exist` 的问题；新增网址专用菜单与 `open-url` 动作（只放行 http/https，拒绝含双引号的地址）。自检改为真实加载客户端模块，去掉 `new Function`，用例从 12 项增至 17 项。
+- **0.1.0** — 首个版本。
+
 ## 安装 / Install
 
 ### 方式一：dsh plugin 命令（推荐）

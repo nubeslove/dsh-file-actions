@@ -33,6 +33,9 @@ function assert(condition, message) {
 async function main() {
   console.log('dsh-file-actions verify');
 
+  const capturedClient = { definition: null, exports: null };
+  const clientSource = await readFile(join(root, 'lib', 'client.js'), 'utf8');
+
   const pkgText = await readFile(join(root, 'package.json'), 'utf8');
   const pkg = JSON.parse(pkgText);
 
@@ -56,19 +59,46 @@ async function main() {
     assert(/id:\s*file-actions/.test(text), '缺少条目 id');
   });
 
-  await check('客户端脚本语法有效', async () => {
-    const code = await readFile(join(root, 'lib', 'client.js'), 'utf8');
-    assert(code.includes('__ModuleLoader__.load'), '缺少模块加载外壳');
-    assert(/id:\s*"dsh-file-actions"/.test(code), '模块 id 不符');
-    // 仅做语法编译，不执行（执行需要 window 环境）
-    new Function(code);
+  await check('客户端模块可被加载器注册', async () => {
+    globalThis.window = {
+      __ModuleLoader__: {
+        load(definition) {
+          capturedClient.definition = definition;
+        }
+      }
+    };
+    await import(pathToFileURL(join(root, 'lib', 'client.js')).href);
+    assert(capturedClient.definition !== null, '未调用 __ModuleLoader__.load');
+    assert(capturedClient.definition.id === 'dsh-file-actions', '模块 id 不符');
+    assert(typeof capturedClient.definition.factory === 'function', 'factory 缺失');
   });
 
-  await check('客户端识别三类引用来源', async () => {
-    const code = await readFile(join(root, 'lib', 'client.js'), 'utf8');
+  await check('客户端 factory 导出 apply 与 inject', () => {
+    const fakeReact = {
+      createElement: () => null,
+      useState: (v) => [v, () => {}],
+      useEffect: () => {},
+      useRef: (v) => ({ current: v }),
+      useMemo: (fn) => fn(),
+      useCallback: (fn) => fn
+    };
+    const fakeRequire = (name) => {
+      if (name === 'react') return fakeReact;
+      throw new Error('unexpected require: ' + name);
+    };
+    capturedClient.exports = capturedClient.definition.factory(fakeRequire);
+    assert(typeof capturedClient.exports.apply === 'function', 'apply 未导出');
+    assert(Array.isArray(capturedClient.exports.inject), 'inject 必须是数组');
+  });
+
+  await check('客户端区分文件与网址两类引用', () => {
+    const code = clientSource;
     assert(code.includes('data-ref-chip'), '缺少 chip 识别');
     assert(code.includes('file://'), '缺少 file 链接识别');
     assert(code.includes('closest("code")'), '缺少行内代码识别');
+    assert(code.includes('URL_LIKE'), '缺少网址识别');
+    assert(code.includes('buildUrlMenu'), '缺少网址菜单分支');
+    assert(code.includes('open-url'), '网址菜单未接入 open-url 动作');
   });
 
   const plugin = await import(pathToFileURL(join(root, 'lib', 'index.js')).href);
@@ -165,6 +195,37 @@ async function main() {
 
   await check('空路径被拒绝', async () => {
     const out = await call('POST', '/api/file-actions/exec', { action: 'open', path: '   ' });
+    assert(out.status === 400, '状态码应为 400');
+    assert(/empty/.test(out.body.error), '错误信息不符：' + out.body.error);
+  });
+
+  await check('文件动作遇到网页地址被拒绝', async () => {
+    const out = await call('POST', '/api/file-actions/exec', {
+      action: 'reveal',
+      path: 'http://127.0.0.1:1420/prototype/index.html'
+    });
+    assert(out.status === 400, '状态码应为 400，实际 ' + out.status);
+    assert(/web URL/.test(out.body.error), '错误信息不符：' + out.body.error);
+    assert(!/profiles/.test(out.body.error), '不应再把 URL 拼成本地路径：' + out.body.error);
+  });
+
+  await check('open-url 拒绝非 http 协议', async () => {
+    const out = await call('POST', '/api/file-actions/exec', { action: 'open-url', path: 'file:///C:/x' });
+    assert(out.status === 400, '状态码应为 400，实际 ' + out.status);
+    assert(/only http/.test(out.body.error), '错误信息不符：' + out.body.error);
+  });
+
+  await check('open-url 拒绝含引号的地址', async () => {
+    const out = await call('POST', '/api/file-actions/exec', {
+      action: 'open-url',
+      path: 'http://a.com/"&calc'
+    });
+    assert(out.status === 400, '状态码应为 400，实际 ' + out.status);
+    assert(/quote/.test(out.body.error), '错误信息不符：' + out.body.error);
+  });
+
+  await check('open-url 拒绝空地址', async () => {
+    const out = await call('POST', '/api/file-actions/exec', { action: 'open-url', path: '' });
     assert(out.status === 400, '状态码应为 400');
     assert(/empty/.test(out.body.error), '错误信息不符：' + out.body.error);
   });
