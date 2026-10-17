@@ -1,0 +1,55 @@
+{
+  "name": "dsh-file-actions",
+  "version": "0.1.0",
+  "description": "DSH Web 插件：对消息中的文件引用（蓝色 chip、行内代码路径、file:// 链接）提供右键菜单，可按文件类型打开文件、在资源管理器中定位、用浏览器打开或复制路径。",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "scripts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": []
+    }
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "plugin",
+    "file",
+    "contextmenu",
+    "file-actions",
+    "explorer"
+  ],
+  "author": "nubeslove",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nubeslove/dsh-file-actions.git"
+  },
+  "homepage": "https://github.com/nubeslove/dsh-file-actions#readme",
+  "bugs": {
+    "url": "https://github.com/nubeslove/dsh-file-actions/issues"
+  },
+  "engines": {
+    "node": ">=22.19"
+  }
+}

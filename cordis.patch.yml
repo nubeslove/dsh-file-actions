@@ -1,0 +1,4 @@
+# dsh-file-actions bundle patch：把插件挂进 profile
+- insert:
+    - id: file-actions
+      name: 'dsh-file-actions'
