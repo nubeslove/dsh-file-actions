@@ -8,6 +8,8 @@ Right-click menu for file references in the DeepSeek Harness web UI.
 [![DSH](https://img.shields.io/badge/DeepSeek%20Harness-0.1.1--rc.2-blue.svg)](https://github.com/deepseek-ai/deepseek-harness)
 [![Topic: dsh-plugin](https://img.shields.io/badge/topic-dsh--plugin-0284c7.svg)](https://github.com/topics/dsh-plugin)
 
+> 装不上、报错、或者行为和文档对不上，直接发邮件到 **1992335297@qq.com**，比开 Issue 更快被看到。
+
 ---
 
 ![文件引用右键菜单](docs/file-menu.png)
@@ -133,8 +135,16 @@ GET /api/file-actions/health
 
 如果这个插件帮你省了几次在资源管理器里翻文件的时间，点个 Star 会让更多人看到它。
 
-## 联系 / Contact
+## 反馈与联系 / Feedback & Contact
 
-有问题、想提需求、或者想聊聊 DSH 插件开发，都可以直接发邮件。
+遇到 bug、安装失败、行为和文档不一致，或者想要某个功能，都可以直接发邮件。
 
-邮箱：**1992335297@qq.com**
+**邮箱：1992335297@qq.com**
+
+邮件里带上这三样，定位会快很多：
+
+- 插件版本（`package.json` 里的 `version`）
+- DSH 版本（`dsh --version`）
+- 报错的完整文字或截图
+
+也可以在 [GitHub Issues](https://github.com/nubeslove/dsh-file-actions/issues) 提，但邮件更快。
