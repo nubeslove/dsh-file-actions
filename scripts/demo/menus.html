@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>dsh-file-actions 界面示意</title>
+<style>
+  :root {
+    --bg: #16181d;
+    --elevated: #1f2229;
+    --text: #e6e8eb;
+    --text-secondary: #9aa4b2;
+    --chip-bg: rgba(56, 160, 255, 0.14);
+    --chip-border: rgba(56, 160, 255, 0.38);
+    --chip-text: #7cc4ff;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .shot {
+    position: relative;
+    width: 820px;
+    padding: 26px 30px 30px;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  .shot + .shot { border-top: 1px solid rgba(127, 127, 127, 0.2); }
+
+  .shot-label {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    opacity: 0.65;
+    margin-bottom: 14px;
+  }
+
+  .bubble {
+    max-width: 640px;
+    padding: 14px 16px;
+    background: var(--elevated);
+    border: 1px solid rgba(127, 127, 127, 0.2);
+    border-radius: 12px;
+    color: var(--text);
+  }
+
+  .bubble p { margin: 0 0 10px; }
+  .bubble p:last-child { margin-bottom: 0; }
+
+  .refchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 7px 1px 5px;
+    margin: 0 2px;
+    border-radius: 6px;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-border);
+    color: var(--chip-text);
+    font-size: 12.5px;
+    font-family: var(--mono);
+    vertical-align: baseline;
+  }
+
+  .refchip .glyph { opacity: 0.85; font-size: 11px; }
+
+  code.inline {
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: rgba(127, 127, 127, 0.16);
+    color: #cfd6e0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    word-break: break-all;
+  }
+
+  /* ---- 与 lib/client.js 中一致的菜单样式 ---- */
+  .dfa-menu {
+    position: relative;
+    margin-top: 34px;
+    width: max-content;
+    min-width: 250px;
+    max-width: min(440px, 92vw);
+    padding: 5px;
+    background: var(--elevated);
+    color: var(--text);
+    border: 1px solid rgba(127, 127, 127, 0.28);
+    border-radius: 11px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .dfa-head {
+    padding: 6px 9px 7px;
+    border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+    margin-bottom: 4px;
+  }
+
+  .dfa-name {
+    font-weight: 600;
+    font-size: 12.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dfa-path {
+    opacity: 0.5;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: var(--mono);
+  }
+
+  .dfa-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 9px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+  }
+
+  .dfa-item.hover { background: rgba(127, 127, 127, 0.16); }
+  .dfa-icon { width: 15px; flex: 0 0 15px; opacity: 0.75; text-align: center; font-size: 12px; }
+  .dfa-sep { height: 1px; margin: 4px 6px; background: rgba(127, 127, 127, 0.2); }
+
+  .cursor {
+    display: inline-block;
+    width: 12px;
+    height: 18px;
+    vertical-align: -3px;
+    background: #7cc4ff;
+    border-radius: 1px;
+    opacity: 0.85;
+  }
+</style>
+</head>
+<body>
+
+  <section class="shot" id="shot-file">
+    <div class="shot-label">文件引用 · 右键</div>
+    <div class="bubble">
+      <p>每页三态：世界内 → C 角色卡 → 空格 暂停。入口在 <span class="refchip"><span class="glyph">&lt;/&gt;</span>index.html</span>（天机镜，六张卡直接点进格状态并链接进去）。</p>
+    </div>
+    <div class="dfa-menu">
+      <div class="dfa-head">
+        <div class="dfa-name">index.html</div>
+        <div class="dfa-path">E:\project\tianxing\prototype\index.html</div>
+      </div>
+      <button class="dfa-item"><span class="dfa-icon">↗</span><span>用默认程序打开</span></button>
+      <button class="dfa-item"><span class="dfa-icon">◍</span><span>用浏览器打开</span></button>
+      <button class="dfa-item hover"><span class="dfa-icon">▤</span><span>在文件夹中显示</span></button>
+      <div class="dfa-sep"></div>
+      <button class="dfa-item"><span class="dfa-icon">⧉</span><span>复制完整路径</span></button>
+    </div>
+  </section>
+
+  <section class="shot" id="shot-url">
+    <div class="shot-label">网页地址 · 右键</div>
+    <div class="bubble">
+      <p>预览地址：<code class="inline">http://127.0.0.1:1420/prototype/tianxing-beautify/index.html</code></p>
+    </div>
+    <div class="dfa-menu">
+      <div class="dfa-head">
+        <div class="dfa-name">127.0.0.1:1420</div>
+        <div class="dfa-path">http://127.0.0.1:1420/prototype/tianxing-beautify/index.html</div>
+      </div>
+      <button class="dfa-item hover"><span class="dfa-icon">◍</span><span>用浏览器打开</span></button>
+      <div class="dfa-sep"></div>
+      <button class="dfa-item"><span class="dfa-icon">⧉</span><span>复制链接</span></button>
+    </div>
+  </section>
+
+</body>
+</html>

@@ -10,6 +10,8 @@ Right-click menu for file references in the DeepSeek Harness web UI.
 
 ---
 
+![文件引用右键菜单](docs/file-menu.png)
+
 ## 它解决什么问题 / The problem
 
 DSH 会把消息里的文件引用渲染成蓝色 chip，例如 `index.html`、`@src/app.tsx`。它们看起来像可以点的链接，实际只能看，想打开文件还得手动去资源管理器里翻。
@@ -36,6 +38,10 @@ DSH renders file mentions as blue chips (`index.html`, `@src/app.tsx`). They loo
 - 内容像本地路径的行内代码（`code` 元素）
 
 被引用的是网页地址（`http://` / `https://`）时，菜单换成网址专用：**用浏览器打开**、**复制链接**。网页地址不会被当成本地路径去定位。
+
+![网页地址右键菜单](docs/url-menu.png)
+
+> 两张图是界面示意，按插件 `lib/client.js` 里同一套菜单样式与 DSH 消息区样式渲染，不是运行截图。可用 `node scripts/make-screenshots.mjs` 重新生成（源码在 `scripts/demo/menus.html`）。
 
 ## 更新记录
 
