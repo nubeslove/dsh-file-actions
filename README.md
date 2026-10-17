@@ -50,17 +50,15 @@ DSH renders file mentions as blue chips (`index.html`, `@src/app.tsx`). They loo
 
 ## 安装 / Install
 
-### 方式一：dsh plugin 命令（推荐）
+### 一条命令
 
 ```bash
-dsh plugin --profile desktop add "link:/absolute/path/to/dsh-file-actions"
+dsh plugin --profile desktop add "github:nubeslove/dsh-file-actions"
 ```
 
-随后在 `$DSH_HOME/profiles/desktop/package.json` 的 `dsh.profile.bundles` 里追加 `"dsh-file-actions"`，重启桌面应用。
+随后在 `$DSH_HOME/profiles/desktop/package.json` 的 `dsh.profile.bundles` 里追加 `"dsh-file-actions"`，重启桌面应用。插件是纯 JS，没有构建步骤，也没有运行时依赖。
 
-> `dsh plugin` 会把参数原样转发给 pnpm。路径含空格时会被拆词，此时请改用方式二。
-
-### 方式二：手工 link（路径含空格时）
+### 本地开发：手工 link（路径含空格时）
 
 1. 在 `profiles/<profile>/package.json` 的 `dependencies` 加一条：
    ```json
