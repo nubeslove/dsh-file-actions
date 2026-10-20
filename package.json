@@ -1,6 +1,6 @@
 {
   "name": "dsh-file-actions",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "DSH Web 插件：对消息中的文件引用（蓝色 chip、行内代码路径、file:// 链接）提供右键菜单，可按文件类型打开文件、在资源管理器中定位、用浏览器打开或复制路径。",
   "type": "module",
   "main": "./lib/index.js",
@@ -26,7 +26,10 @@
     },
     "client": {
       "platform": "web",
-      "inject": []
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-slots"
+      ]
     }
   },
   "keywords": [

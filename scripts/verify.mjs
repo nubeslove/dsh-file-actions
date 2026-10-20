@@ -95,7 +95,7 @@ async function main() {
     const code = clientSource;
     assert(code.includes('data-ref-chip'), '缺少 chip 识别');
     assert(code.includes('file://'), '缺少 file 链接识别');
-    assert(code.includes('closest("code")'), '缺少行内代码识别');
+    assert(code.includes('closest("code'), '缺少行内代码识别');
     assert(code.includes('URL_LIKE'), '缺少网址识别');
     assert(code.includes('buildUrlMenu'), '缺少网址菜单分支');
     assert(code.includes('open-url'), '网址菜单未接入 open-url 动作');

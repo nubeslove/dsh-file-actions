@@ -33,11 +33,13 @@ DSH renders file mentions as blue chips (`index.html`, `@src/app.tsx`). They loo
 
 菜单头部显示文件名与完整路径，长路径左侧渐隐，方便确认打开的是哪一个。
 
-以下三种引用形态都能识别：
+以下这些引用形态都能识别：
 
-- `[data-ref-chip]` 元素（DSH 渲染的蓝色文件 chip）
+- `[data-ref-chip]` 元素（DSH 渲染的蓝色文件 chip），`file` / `folder` / `skill` 三种都认
+- 任何 `title` 属性里写着完整路径的元素（chip 的 `title` 被裁掉时用这条兜底）
 - `file:///` 形式的链接
-- 内容像本地路径的行内代码（`code` 元素）
+- 行内代码、键名与示例文本（`code` / `kbd` / `samp`）
+- 元素内容整串就是一个路径（最后兜底）
 
 被引用的是网页地址（`http://` / `https://`）时，菜单换成网址专用：**用浏览器打开**、**复制链接**。网页地址不会被当成本地路径去定位。
 
@@ -45,8 +47,15 @@ DSH renders file mentions as blue chips (`index.html`, `@src/app.tsx`). They loo
 
 > 两张图是界面示意，按插件 `lib/client.js` 里同一套菜单样式与 DSH 消息区样式渲染，不是运行截图。可用 `node scripts/make-screenshots.mjs` 重新生成（源码在 `scripts/demo/menus.html`）。
 
+### 右侧栏文档预览
+
+右侧栏打开文件预览时，标签头部会多出一个 **▤ 定位** 按钮，直接在当前文档所在的文件夹里选中它。
+
+它注册在 `sidebar.right.tab.document.actions` 插槽上，拿到的是当前文档的 `absolutePath`——官方为这类操作预留的接缝，不需要拦截或改写预览组件。
+
 ## 更新记录
 
+- **0.1.2** — 修好两类「蓝色文件右键没反应」：`data-ref-chip="skill"` 的引用之前被整体跳过，现在照常当文件处理；以 `/` 结尾的目录路径匹配不上正则，现在能认。识别范围扩到 `title` 属性、`kbd`/`samp` 与整串路径元素。新增右侧栏文档预览头部的「定位」按钮。新增 `scripts/dom-test.mjs`，在真实 Chromium 里跑 14 项 DOM 回归。
 - **0.1.1** — 修复网页地址被误当作相对路径解析、报 `path does not exist` 的问题；新增网址专用菜单与 `open-url` 动作（只放行 http/https，拒绝含双引号的地址）。自检改为真实加载客户端模块，去掉 `new Function`，用例从 12 项增至 17 项。
 - **0.1.0** — 首个版本。
 
