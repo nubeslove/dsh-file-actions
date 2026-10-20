@@ -103,6 +103,14 @@ async function main() {
 
   const plugin = await import(pathToFileURL(join(root, 'lib', 'index.js')).href);
 
+  await check('定位动作走 start 转交且不隐藏窗口', async () => {
+    const source = await readFile(join(root, 'lib', 'index.js'), 'utf8');
+    // explorer.exe 被 CREATE_NO_WINDOW 启动后会静默退出，不转发 /select
+    assert(/windowsHide:\s*!showWindow/.test(source), 'windowsHide 必须可关闭');
+    assert(/launch\('cmd\.exe', \['\/c', 'start', '""', 'explorer\.exe'/.test(source), '定位应经 cmd start 转交');
+    assert(/launch\('cmd\.exe', \['\/c', 'start', '""', 'explorer\.exe', '\/select,"' \+ path \+ '"'\], true, true\)/.test(source), '定位应显式要求显示窗口');
+  });
+
   await check('宿主导出 name 与 apply', () => {
     assert(plugin.name === 'file-actions', 'name 不符');
     assert(typeof plugin.apply === 'function', 'apply 缺失');

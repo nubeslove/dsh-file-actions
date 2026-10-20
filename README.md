@@ -55,6 +55,7 @@ DSH renders file mentions as blue chips (`index.html`, `@src/app.tsx`). They loo
 
 ## 更新记录
 
+- **0.1.3** — 修好「在文件夹中显示」点了没反应。`explorer.exe` 被 `CREATE_NO_WINDOW`（`windowsHide: true`）启动后会静默退出，不转发 `/select` 请求；现在改走已验证的 `cmd /c start "" explorer.exe /select,"path"`，并显式要求显示窗口。自检增至 18 项。
 - **0.1.2** — 修好两类「蓝色文件右键没反应」：`data-ref-chip="skill"` 的引用之前被整体跳过，现在照常当文件处理；以 `/` 结尾的目录路径匹配不上正则，现在能认。识别范围扩到 `title` 属性、`kbd`/`samp` 与整串路径元素。新增右侧栏文档预览头部的「定位」按钮。新增 `scripts/dom-test.mjs`，在真实 Chromium 里跑 14 项 DOM 回归。
 - **0.1.1** — 修复网页地址被误当作相对路径解析、报 `path does not exist` 的问题；新增网址专用菜单与 `open-url` 动作（只放行 http/https，拒绝含双引号的地址）。自检改为真实加载客户端模块，去掉 `new Function`，用例从 12 项增至 17 项。
 - **0.1.0** — 首个版本。
